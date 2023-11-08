@@ -24,9 +24,9 @@ lvl_pos_x = 0
 buzo = Player(50, LIMITE_AGUA, 5)
 
 #creación de tiburones 
-tiburon = Tiburon(2000, 200, 80, 40)
-tiburon2 = Tiburon(1500, 350, 80, 40)
-tiburon3 = Tiburon(1500, 500, 100, 60)
+tiburon = Tiburon(800, 85)
+tiburon2 = Tiburon(800, 85)
+tiburon3 = Tiburon(800, 85)
 
 # Crear una instancia de HUD
 hud = HUD(pantalla, buzo)
@@ -40,6 +40,8 @@ botin2 = Botin(background.background_pos_x-200, 300)
 
 #TIMER cosas que van a pasar con una cadencia, por ejemplo mover enemigos
 clock = pygame.time.Clock()
+EVENTO_FRAME_TIBURONES = pygame.USEREVENT + 1
+pygame.time.set_timer(EVENTO_FRAME_TIBURONES, 200)
 
 correr = True
 while correr:
@@ -50,8 +52,10 @@ while correr:
             correr = False
         if evento.type == pygame.MOUSEBUTTONDOWN:
             pos_mous = pygame.mouse.get_pos()
-            print(pos_mous)
-            #print(background.image.get_width())
+            #print(pos_mous)
+            tiburon.mover_tiburones()
+            print(tiburon.frame)
+            print(tiburon.nadar_izq)
 
     #captura los eventos de teclas presionadas
     keys = pygame.key.get_pressed()
@@ -72,14 +76,15 @@ while correr:
         botin.esparcir_botin(buzo, pantalla, background_pos_x-botin.rect.width)
         botin1.esparcir_botin(buzo, pantalla, background_pos_x-botin.rect.width)
         botin2.esparcir_botin(buzo, pantalla, background_pos_x-botin.rect.width)
+        buzo.update()
+        buzo.draw(pantalla)
         tiburon.update()
         tiburon2.update()
         tiburon3.update()
         tiburon.draw(pantalla, buzo)
         tiburon2.draw(pantalla, buzo)
         tiburon3.draw(pantalla, buzo)
-        buzo.update()
-        buzo.draw(pantalla)
+        
         
         
         #pygame.draw.rect(pantalla, COLOR_ROJO, background_rect, 1) rect del background

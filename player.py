@@ -5,10 +5,10 @@ from auxiliar import Auxiliar
 
 class Player:
     def __init__(self, x, y, velocidad):
-        self.nadar_der = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo.png", 4, 4, 2, 170, 170)
-        self.nadar_izq = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo.png", 4, 4, 1, 170, 170)
-        self.nadar_arriba = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo.png", 4, 4, 3, 170, 170)
-        self.nadar_abajo = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo.png", 4, 4, 0, 170, 170)
+        self.nadar_der = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo-agua.png", 4, 4, 2, 170, 170)
+        self.nadar_izq = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo-agua.png", 4, 4, 1, 170, 170)
+        self.nadar_arriba = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo-agua.png", 4, 4, 3, 170, 170)
+        self.nadar_abajo = Auxiliar.getSurfaceFromSprite(PATH_IMAGE+"/spritesheet-buzo-agua.png", 4, 4, 0, 170, 170)
         self.posicion_x = x
         self.posicion_y = y
         self.velocidad = velocidad
