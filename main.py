@@ -53,12 +53,10 @@ while correr:
         if evento.type == pygame.MOUSEBUTTONDOWN:
             pos_mous = pygame.mouse.get_pos()
             #print(pos_mous)
-            tiburon.mover_tiburones()
-            print(tiburon.frame)
-            print(tiburon.nadar_izq)
 
     #captura los eventos de teclas presionadas
     keys = pygame.key.get_pressed()
+    tiempo_transcurrido = CLOCK.tick(FPS)  # Obtener el tiempo transcurrido
 
     # Eventos de teclado
     buzo.control(keys)
@@ -78,9 +76,9 @@ while correr:
         botin2.esparcir_botin(buzo, pantalla, background_pos_x-botin.rect.width)
         buzo.update()
         buzo.draw(pantalla)
-        tiburon.update()
-        tiburon2.update()
-        tiburon3.update()
+        tiburon.update(tiempo_transcurrido)
+        tiburon2.update(tiempo_transcurrido)
+        tiburon3.update(tiempo_transcurrido)
         tiburon.draw(pantalla, buzo)
         tiburon2.draw(pantalla, buzo)
         tiburon3.draw(pantalla, buzo)

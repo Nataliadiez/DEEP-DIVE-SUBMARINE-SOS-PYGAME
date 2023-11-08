@@ -17,18 +17,21 @@ class Tiburon:
         self.rect_imagen.x = random.randrange(200, 2000, 100) #donde aparecen eje x
         self.rect_imagen.y = random.randrange(LIMITE_AGUA+10, 600, 100) #donde aparecen eje y
         self.rect_colision = (self.rect_imagen.x ,self.rect_imagen.y ,100,80)
+        self.tiempo_transcurrido = 0
+        self.tiempo_cambio_frame = 200  # Tiempo (en milisegundos) para cambiar de frame
         
-    def mover_tiburones(self):
-        self.animation = self.nadar_izq
-        self.frame = (self.frame + 1) % len(self.animation)
 
-    def update(self):
+    def update(self, delta_tiempo):
+        # Incrementar el tiempo transcurrido
+        self.tiempo_transcurrido += delta_tiempo
+        # Cambiar de frame si ha pasado el tiempo necesario
+        if self.tiempo_transcurrido >= self.tiempo_cambio_frame:
+            self.frame = (self.frame + 1) % len(self.animation)
+            self.imagen = self.animation[self.frame]
+            self.tiempo_transcurrido = 0  # Reiniciar el contador
         self.rect_imagen.x -= self.velocidad
 
     def draw(self, pantalla, personaje):
-        self.image = self.animation[self.frame]
-        self.rect_colision = (self.rect_imagen.x ,self.rect_imagen.y+30 ,30,20)
-        
         if self.visible and personaje.rect.colliderect(self.rect_colision):
             personaje.porcentaje_vida -= 10
             self.visible = False
