@@ -19,11 +19,13 @@ class Botin():
         self.original_x = pos_x  # Guardar la posición original en relación al fondo
         self.original_y = pos_y
         self.visible = True
+        self.colision = True
         
     #Esta lógica me sirve para poder hacer que recoja los elementos del submarino
     def esparcir_botin(self, personaje, pantalla, scroll_amount_x):
-        if personaje.rect.colliderect(self.rect):
+        if self.colision and personaje.rect.colliderect(self.rect):
             self.visible = False
+            self.colision = False
             personaje.objetos += 1
         if self.visible:
             # Actualiza la posición del botín con el scroll_amount en ambos ejes

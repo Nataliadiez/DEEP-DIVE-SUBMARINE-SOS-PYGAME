@@ -16,3 +16,7 @@ class Auxiliar:
                 surface_fotograma = surface_imagen.subsurface(x,y,fotograma_ancho, fotograma_alto)
                 lista.append(surface_fotograma)
         return lista
+    
+    @staticmethod
+    def rectangulos(pantalla, color):
+        pass
