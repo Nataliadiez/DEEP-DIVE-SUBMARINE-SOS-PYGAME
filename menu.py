@@ -18,6 +18,10 @@ class Menu_inicio:
         self.seleccionado = None
         self.correr = True
         self.blitear_menu = True
+        #TODO lógica para llevarme de acá a otra clase
+        self.tiempo_restante = 60
+        self.evento_timer = pygame.USEREVENT
+        pygame.time.set_timer(self.evento_timer, 1000)
         
 
     def mostrar_menu(self, lista_eventos, tiempo_transcurrido):
@@ -28,6 +32,7 @@ class Menu_inicio:
             self.pantalla.blit(self.background_menu, (0,0))
             self.pantalla.blit(self.img_opciones, (-40,-40))
             self.img_opciones.set_colorkey(COLOR_BLANCO)
+        
         return self.correr
         
 
@@ -41,14 +46,19 @@ class Menu_inicio:
                 print(pos_mous)
                 if (pos_mous[0] >= 259 and pos_mous[0] <= 480) and (pos_mous[1] >= 197 and pos_mous[1] <= 264):
                     self.seleccionado = 0
-        if self.seleccionado != None:
+            if evento.type == self.evento_timer:
+                if self.tiempo_restante > 0:
+                    self.tiempo_restante -= 1
+                    
+
+        if self.seleccionado is not None:
             self.keys = pygame.key.get_pressed()
             self.realizar_accion()
 
     def realizar_accion(self):
         if self.opciones[self.seleccionado] == "Nuevo Juego":
             self.blitear_menu = False
-            self.niveles.nivel_1(self.keys, self.tiempo_transcurrido)
+            self.niveles.nivel_1(self.keys, self.tiempo_transcurrido, self.tiempo_restante)
         elif self.opciones[self.seleccionado] == "Continuar":
             print("Continuar juego")
             # logica para continuar con el nivel en que estaba jugando
@@ -58,10 +68,3 @@ class Menu_inicio:
         elif self.opciones[self.seleccionado] == "Score":
             print("Ver puntuación")
             # lógica de puntuación
-
-
-
-
-
-
-

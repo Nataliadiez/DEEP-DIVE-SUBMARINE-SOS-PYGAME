@@ -46,6 +46,8 @@ class Player:
             self.posicion_y = self.velocidad
             self.animation = self.nadar_abajo
             self.frame = (self.frame + 1) % len(self.animation)
+    
+    
 
     def update(self):
         x = self.rect.x + self.posicion_x

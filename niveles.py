@@ -14,6 +14,8 @@ class Niveles:
         self.tiburon1 = Tiburon(800, 85)#creación de tiburones
         self.tiburon2 = Tiburon(800, 85)#creación de tiburones
         self.tiburon3 = Tiburon(800, 85)#creación de tiburones
+        self.tiburon4 = Tiburon(800, 85)#creación de tiburones
+        self.tiburon5 = Tiburon(800, 85)#creación de tiburones
         self.botin1 = Botin(self.background.background_pos_x-2000, LIMITE_AGUA+50)
         self.botin2 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+200)
         self.botin3 = Botin(self.background.background_pos_x-6000, LIMITE_AGUA+20)
@@ -23,9 +25,11 @@ class Niveles:
         self.clock = pygame.time.Clock()
         self.pantalla = pantalla
 
-    def nivel_1(self, keys, tiempo_transcurrido):#lógica del bucle
+    def nivel_1(self, keys, tiempo_transcurrido, timer_segundos):#lógica del bucle
         # Eventos de teclado
         self.buzo.control(keys)
+        if timer_segundos == 0:
+            self.buzo.vivo = False
 
         x_relativa = self.lvl_pos_x % self.background.ancho # Cálculo del movimiento del fondo basado en la posición del jugador
         if self.buzo.vivo:
@@ -47,10 +51,14 @@ class Niveles:
             self.tiburon1.update(tiempo_transcurrido)
             self.tiburon2.update(tiempo_transcurrido)
             self.tiburon3.update(tiempo_transcurrido)
+            self.tiburon4.update(tiempo_transcurrido)
+            self.tiburon5.update(tiempo_transcurrido)
             self.tiburon1.draw(self.pantalla, self.buzo)
             self.tiburon2.draw(self.pantalla, self.buzo)
             self.tiburon3.draw(self.pantalla, self.buzo)
-            self.hud.actualizar_hud()
+            self.tiburon4.draw(self.pantalla, self.buzo)
+            self.tiburon5.draw(self.pantalla, self.buzo)
+            self.hud.actualizar_hud(timer_segundos)
             if self.buzo.objetos >= 3:
                 Pantallas.pantalla_fin_nivel(self.pantalla)
         else:
