@@ -14,34 +14,15 @@ class Niveles:
         self.tiburon1 = Tiburon(800, 85)#creación de tiburones
         self.tiburon2 = Tiburon(800, 85)#creación de tiburones
         self.tiburon3 = Tiburon(800, 85)#creación de tiburones
-        self.botin1 = Botin(self.background.background_pos_x-2000, LIMITE_AGUA+20)
-        self.botin2 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+20)
+        self.botin1 = Botin(self.background.background_pos_x-2000, LIMITE_AGUA+50)
+        self.botin2 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+200)
         self.botin3 = Botin(self.background.background_pos_x-6000, LIMITE_AGUA+20)
-        self.botin4 = Botin(self.background.background_pos_x-7000, LIMITE_AGUA+20)
-        self.botin5 = Botin(self.background.background_pos_x-1000, LIMITE_AGUA+20)
-        botin5 = Botin(self.background.background_pos_x-1000, 300)
+        self.botin4 = Botin(self.background.background_pos_x-7000, LIMITE_AGUA+80)
+        self.botin5 = Botin(self.background.background_pos_x-1000, LIMITE_AGUA+100)
         self.hud = HUD(pantalla, self.buzo)# Crear una instancia de HUD
         self.clock = pygame.time.Clock()
-        self.lista_botines = []
         self.pantalla = pantalla
 
-    """ def creacion_de_botines(self, cantidad, posicion_x, posicion_y):
-        botin1 = Botin(self.background.background_pos_x-2000, LIMITE_AGUA+20)
-        botin2 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+20)
-        botin3 = Botin(self.background.background_pos_x-6000, LIMITE_AGUA+20)
-        botin4 = Botin(self.background.background_pos_x-7000, LIMITE_AGUA+20)
-        botin5 = Botin(self.background.background_pos_x-1000, 300)
-        self.lista_botines.append[botin1]
-        self.lista_botines.append[botin2]
-        self.lista_botines.append[botin3]
-        self.lista_botines.append[botin4]
-        self.lista_botines.append[botin5]
-
-        for i in range (cantidad):
-            botin = Botin(self.background.background_pos_x-posicion_x, LIMITE_AGUA - posicion_y)
-            self.lista_botines.append(botin)
-        return self.lista_botines """
-        
     def nivel_1(self, keys, tiempo_transcurrido):#lógica del bucle
         # Eventos de teclado
         self.buzo.control(keys)
@@ -55,6 +36,7 @@ class Niveles:
         self.background.draw(self.pantalla, self.background.background_pos_x)
 
         if self.buzo.vivo:
+            # Reemplaza la llamada anterior a self.botinX.esparcir_botin con el uso de los botines recién creados
             self.botin1.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin1.rect.width)
             self.botin2.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin2.rect.width)
             self.botin3.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin3.rect.width)

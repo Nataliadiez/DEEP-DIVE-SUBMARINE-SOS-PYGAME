@@ -19,7 +19,7 @@ class HUD:
         pantalla_ancho = ANCHO_VENTANA
         pantalla_altura = ALTO_VENTANA
 
-        #PANTALLA MENSAJE MUERTO
+        #Items recogidos
         font = pygame.font.SysFont("Arial Narrow", 50)
         texto = str(objetos)
         text = font.render(texto, True, COLOR_NEGRO)
@@ -27,7 +27,6 @@ class HUD:
         text_rect.centerx = ANCHO_VENTANA // 2  # Centrar en el eje X
         text_rect.y = 15  # Posicionar en el eje Y a 50
         
-
 
         # Dibujar el texto en la pantalla
         self.pantalla.blit(self.img_barra_vida, (self.rect_barra_vida))
