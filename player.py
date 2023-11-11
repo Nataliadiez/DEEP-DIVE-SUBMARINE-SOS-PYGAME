@@ -1,6 +1,7 @@
 import pygame
 from constantes import *
 from auxiliar import Auxiliar
+from enemigo import *
 
 
 class Player:
@@ -25,6 +26,9 @@ class Player:
         self.vivo = True
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.posicion_x, self.posicion_y)
+        #colisiones
+        self.colision = True
+        self.num_colisiones = 0
 
     def control(self, keys):
         self.posicion_x = 0
@@ -47,7 +51,17 @@ class Player:
             self.animation = self.nadar_abajo
             self.frame = (self.frame + 1) % len(self.animation)
     
-    
+    def manejar_colisiones(self, lista_tiburones, lista_botines):
+        for tiburon in lista_tiburones:
+            if self.colision and self.rect.colliderect(tiburon.rect_colision):
+                self.porcentaje_vida -= 10
+                self.colision = False
+                self.num_colisiones += 1
+                print(self.num_colisiones)
+            elif tiburon.salio_pantalla:
+                self.colision = True
+            if self.porcentaje_vida <= 0:
+                self.vivo = False
 
     def update(self):
         x = self.rect.x + self.posicion_x
@@ -61,3 +75,4 @@ class Player:
     def draw(self, screen):
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect.topleft)
+        pygame.draw.rect(screen, COLOR_ROJO_PAINT, self.rect, 1)

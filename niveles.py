@@ -11,16 +11,14 @@ class Niveles:
         self.background = Background("DEEP DIVE - SUBMARINE SOS/img/background/ecco3.png")#background
         self.lvl_pos_x = 0 #logica scroll
         self.buzo = Player(50, LIMITE_AGUA, 5)#personaje
-        self.tiburon1 = Tiburon(800, 85)#creación de tiburones
-        self.tiburon2 = Tiburon(800, 85)#creación de tiburones
-        self.tiburon3 = Tiburon(800, 85)#creación de tiburones
-        self.tiburon4 = Tiburon(800, 85)#creación de tiburones
-        self.tiburon5 = Tiburon(800, 85)#creación de tiburones
+        self.tiburon1 = Tiburon()#creación de tiburones
+        self.tiburon2 = Tiburon()#creación de tiburones
+        self.tiburon3 = Tiburon()#creación de tiburones
+        self.lista_tiburones = [self.tiburon1, self.tiburon2, self.tiburon3]
         self.botin1 = Botin(self.background.background_pos_x-2000, LIMITE_AGUA+50)
         self.botin2 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+200)
         self.botin3 = Botin(self.background.background_pos_x-6000, LIMITE_AGUA+20)
-        self.botin4 = Botin(self.background.background_pos_x-7000, LIMITE_AGUA+80)
-        self.botin5 = Botin(self.background.background_pos_x-1000, LIMITE_AGUA+100)
+        self.lista_botines = [self.botin1, self.botin2, self.botin3]
         self.hud = HUD(pantalla, self.buzo)# Crear una instancia de HUD
         self.clock = pygame.time.Clock()
         self.pantalla = pantalla
@@ -44,20 +42,15 @@ class Niveles:
             self.botin1.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin1.rect.width)
             self.botin2.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin2.rect.width)
             self.botin3.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin3.rect.width)
-            self.botin4.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin4.rect.width)
-            self.botin5.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin5.rect.width)
             self.buzo.update()
             self.buzo.draw(self.pantalla)
             self.tiburon1.update(tiempo_transcurrido)
             self.tiburon2.update(tiempo_transcurrido)
             self.tiburon3.update(tiempo_transcurrido)
-            self.tiburon4.update(tiempo_transcurrido)
-            self.tiburon5.update(tiempo_transcurrido)
-            self.tiburon1.draw(self.pantalla, self.buzo)
-            self.tiburon2.draw(self.pantalla, self.buzo)
-            self.tiburon3.draw(self.pantalla, self.buzo)
-            self.tiburon4.draw(self.pantalla, self.buzo)
-            self.tiburon5.draw(self.pantalla, self.buzo)
+            self.tiburon1.draw(self.pantalla)
+            self.tiburon2.draw(self.pantalla)
+            self.tiburon3.draw(self.pantalla)
+            self.buzo.manejar_colisiones(self.lista_tiburones, self.lista_botines)
             self.hud.actualizar_hud(timer_segundos)
             if self.buzo.objetos >= 3:
                 Pantallas.pantalla_fin_nivel(self.pantalla)
