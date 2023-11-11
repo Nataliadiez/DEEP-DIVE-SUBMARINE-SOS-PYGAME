@@ -16,8 +16,8 @@ class Niveles:
         self.tiburon3 = Tiburon()#creación de tiburones
         self.lista_tiburones = [self.tiburon1, self.tiburon2, self.tiburon3]
         self.botin1 = Botin(self.background.background_pos_x-2000, LIMITE_AGUA+50)
-        self.botin2 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+200)
-        self.botin3 = Botin(self.background.background_pos_x-6000, LIMITE_AGUA+20)
+        self.botin2 = Botin(self.background.background_pos_x-3000, LIMITE_AGUA+200)
+        self.botin3 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+20)
         self.lista_botines = [self.botin1, self.botin2, self.botin3]
         self.hud = HUD(pantalla, self.buzo)# Crear una instancia de HUD
         self.clock = pygame.time.Clock()
@@ -39,9 +39,9 @@ class Niveles:
 
         if self.buzo.vivo:
             # Reemplaza la llamada anterior a self.botinX.esparcir_botin con el uso de los botines recién creados
-            self.botin1.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin1.rect.width)
-            self.botin2.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin2.rect.width)
-            self.botin3.esparcir_botin(self.buzo, self.pantalla, self.background.background_pos_x-self.botin3.rect.width)
+            self.botin1.esparcir_botin(self.pantalla, self.background.background_pos_x-self.botin1.rect.width)
+            self.botin2.esparcir_botin(self.pantalla, self.background.background_pos_x-self.botin2.rect.width)
+            self.botin3.esparcir_botin(self.pantalla, self.background.background_pos_x-self.botin3.rect.width)
             self.buzo.update()
             self.buzo.draw(self.pantalla)
             self.tiburon1.update(tiempo_transcurrido)

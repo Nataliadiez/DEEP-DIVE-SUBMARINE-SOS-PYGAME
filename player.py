@@ -27,7 +27,6 @@ class Player:
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.posicion_x, self.posicion_y)
         #colisiones
-        self.colision = True
         self.num_colisiones = 0
 
     def control(self, keys):
@@ -53,15 +52,18 @@ class Player:
     
     def manejar_colisiones(self, lista_tiburones, lista_botines):
         for tiburon in lista_tiburones:
-            if self.colision and self.rect.colliderect(tiburon.rect_colision):
+            if self.rect.colliderect(tiburon.rect_colision) and tiburon.colision_tiburon:
                 self.porcentaje_vida -= 10
-                self.colision = False
                 self.num_colisiones += 1
+                tiburon.colision_tiburon = False
                 print(self.num_colisiones)
-            elif tiburon.salio_pantalla:
-                self.colision = True
             if self.porcentaje_vida <= 0:
                 self.vivo = False
+        for botin in lista_botines:
+            if botin.visible and self.rect.colliderect(botin.rect) and botin.colision_botin:
+                botin.visible = False
+                self.objetos += 1
+                botin.colision_botin = False  # Desactivar la colisión solo para este botín
 
     def update(self):
         x = self.rect.x + self.posicion_x
