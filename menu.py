@@ -1,7 +1,9 @@
 import pygame
-import sys
 from constantes import *
-from niveles import Niveles
+from niveles import Nivel_1
+from sonido import Sonido_y_musica
+from niveles import Nivel_2
+from niveles import Nivel_3
 
 class Menu_inicio:
     def __init__(self, pantalla):
@@ -9,11 +11,13 @@ class Menu_inicio:
         self.keys = None
         self.eventos = None
         self.tiempo_transcurrido = 0
-        self.niveles = Niveles(self.pantalla)
+        self.nivel_1 = Nivel_1(self.pantalla)
+        self.nivel_2 = Nivel_2(self.pantalla)
+        self.nivel_3 = Nivel_3(self.pantalla)
         self.background_menu = pygame.image.load("DEEP DIVE - SUBMARINE SOS/img/background-lvl-2.jpg").convert()
         self.background_menu = pygame.transform.scale(self.background_menu, (1000, ALTO_VENTANA))
         self.img_opciones = pygame.image.load("DEEP DIVE - SUBMARINE SOS/img/opciones_menu.png").convert()
-        self.img_opciones = pygame.transform.scale(self.img_opciones, (850, 550))
+        self.img_opciones = pygame.transform.scale(self.img_opciones, (400, 450))
         self.opciones = ["Nuevo Juego", "Continuar", "Opciones", "Score"]
         self.seleccionado = None
         self.correr = True
@@ -21,6 +25,7 @@ class Menu_inicio:
         #TODO lógica para llevarme de acá a otra clase
         self.tiempo_restante = 60
         self.evento_timer = pygame.USEREVENT
+        self.sonido = Sonido_y_musica()
         pygame.time.set_timer(self.evento_timer, 1000)
         
 
@@ -30,11 +35,14 @@ class Menu_inicio:
         self.manejar_eventos()
         if self.blitear_menu:
             self.pantalla.blit(self.background_menu, (0,0))
-            self.pantalla.blit(self.img_opciones, (-40,-40))
-            self.img_opciones.set_colorkey(COLOR_BLANCO)
+            self.pantalla.blit(self.img_opciones, (300, 0))
+            self.img_opciones.set_colorkey(COLOR_ROJO_PAINT)
+            self.sonido.volumen_menu = 0.3
+            self.sonido.musica_fondo_menu.set_volume(self.sonido.volumen_menu)
+        else:
+            self.sonido.musica_fondo_menu.stop()
         
         return self.correr
-        
 
     def manejar_eventos(self):
         for evento in self.eventos:
@@ -44,12 +52,13 @@ class Menu_inicio:
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 pos_mous = list(pygame.mouse.get_pos())
                 print(pos_mous)
-                if (pos_mous[0] >= 259 and pos_mous[0] <= 480) and (pos_mous[1] >= 197 and pos_mous[1] <= 264):
+                if (pos_mous[0] >= 375 and pos_mous[0] <= 616) and (pos_mous[1] >= 172 and pos_mous[1] <= 239):
                     self.seleccionado = 0
+                elif (pos_mous[0] >= 375 and pos_mous[0] <= 616) and (pos_mous[1] >= 268 and pos_mous[1] <= 333):
+                    self.seleccionado = 1
             if evento.type == self.evento_timer:
                 if self.tiempo_restante > 0:
                     self.tiempo_restante -= 1
-                    
 
         if self.seleccionado is not None:
             self.keys = pygame.key.get_pressed()
@@ -58,10 +67,16 @@ class Menu_inicio:
     def realizar_accion(self):
         if self.opciones[self.seleccionado] == "Nuevo Juego":
             self.blitear_menu = False
-            self.niveles.nivel_1(self.keys, self.tiempo_transcurrido, self.tiempo_restante)
+            #TODO en la clase niveles, o en una nueva que se llama jugar, desde ahí llamar a los niveles
+            self.nivel_1.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
+            if self.nivel_1.estado_nivel:
+                self.nivel_2.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
+            else:
+                pass
+                #TODO armar una pantalla para preguntar si desea continuar en ese nivel
         elif self.opciones[self.seleccionado] == "Continuar":
-            print("Continuar juego")
-            # logica para continuar con el nivel en que estaba jugando
+            self.blitear_menu = False
+            self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
         elif self.opciones[self.seleccionado] == "Opciones":
             print("Ir a opciones")
             # logica para silenciar la música
