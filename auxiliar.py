@@ -1,5 +1,5 @@
 import pygame
-import json
+from constantes import *
 
 class Auxiliar:
     @staticmethod #se pone metodo estatico para no construir un objeto
@@ -25,8 +25,25 @@ class Auxiliar:
         #pygame.draw.rect(pantalla, color, buzo.rect, 1)
         #pygame.draw.rect(pantalla, COLOR_ROJO_PAINT, self.rect_colision, 1)
         pass
+
+    @staticmethod
+    def personalizar_img(ruta:str, scale=False, ancho=None, alto=None, color_key=False, color=None):
+        imagen = pygame.image.load(ruta).convert()
+        if scale:
+            imagen = pygame.transform.scale(imagen, (ancho, alto))
+        if color_key:
+            imagen.set_colorkey(color)
+
+        return imagen
     
-            
+    @staticmethod
+    def dibujar_enemigos(menu:object)->None:
+        for i in range (len(menu.nivel_1.lista_tiburones)):
+            tiburon = menu.nivel_1.lista_tiburones
+            if i <= 2:
+                tiburon[i].set_animation(f"{PATH_IMAGE}/enemigos/Shark-Sheet.png", 8, 1, 0, ANCHO_TIBURON,ALTO_TIBURON, False, None)
+            else:
+                tiburon[i].set_animation(f"{PATH_IMAGE}/enemigos/pez_espada.png", 4, 1, 0, 300, 50, False, None)
 
 
     #TODO usar esta lógica para guardar los puntajes en vez de la música

@@ -33,14 +33,7 @@ class Botin():
 class Armas(Botin):
     def __init__(self, pos_x, pos_y) -> None:
         super().__init__(pos_x, pos_y)
-        opciones_botin = [
-            PATH_IMAGE+"/botin/arma1.png",
-            PATH_IMAGE+"/botin/arma2.png",
-            PATH_IMAGE+"/botin/arma3.png"
-        ]
-        imagen_elegida = random.choice(opciones_botin)
-        self.objeto = pygame.image.load(imagen_elegida)
-        self.objeto = pygame.transform.scale(self.objeto, (60, 40))
+        self.objeto = Auxiliar.personalizar_img(PATH_IMAGE+"/botin/misil.png", True, 33, 30, True, COLOR_BLANCO)
         self.rect = self.objeto.get_rect()
         self.rect.x = pos_x
         self.rect.y = pos_y

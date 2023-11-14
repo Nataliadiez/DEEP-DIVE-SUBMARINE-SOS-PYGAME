@@ -22,26 +22,37 @@ class Menu_inicio:
         self.seleccionado = None
         self.correr = True
         self.blitear_menu = True
+        self.sonido = Sonido_y_musica()
         #TODO lógica para llevarme de acá a otra clase
         self.tiempo_restante = 60
         self.evento_timer = pygame.USEREVENT
-        self.sonido = Sonido_y_musica()
         pygame.time.set_timer(self.evento_timer, 1000)
-        
+        self.nuevo_nivel = False
+        self.timer_reiniciado_1 = False
+        self.timer_reiniciado_2 = False
 
+        """ self.tiempo_restante_2 = 60
+        self.evento_timer_2 = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.evento_timer_2, 1000) """
+        
     def mostrar_menu(self, lista_eventos, tiempo_transcurrido):
-        self.eventos = lista_eventos
+        if self.nivel_1.estado_nivel and self.timer_reiniciado_1 == False:
+            self.tiempo_restante = 60
+            self.timer_reiniciado_1 = True
+        elif self.nivel_2.estado_nivel and self.timer_reiniciado_2 == False:
+            self.tiempo_restante = 60
+            self.timer_reiniciado_2 = True
         self.tiempo_transcurrido = tiempo_transcurrido
+        self.eventos = lista_eventos
         self.manejar_eventos()
         if self.blitear_menu:
             self.pantalla.blit(self.background_menu, (0,0))
             self.pantalla.blit(self.img_opciones, (300, 0))
             self.img_opciones.set_colorkey(COLOR_ROJO_PAINT)
-            self.sonido.volumen_menu = 0.3
+            self.sonido.volumen_menu = 0.2
             self.sonido.musica_fondo_menu.set_volume(self.sonido.volumen_menu)
         else:
             self.sonido.musica_fondo_menu.stop()
-        
         return self.correr
 
     def manejar_eventos(self):
@@ -71,6 +82,8 @@ class Menu_inicio:
             self.nivel_1.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
             if self.nivel_1.estado_nivel:
                 self.nivel_2.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
+            if self.nivel_2.estado_nivel:
+                self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
             else:
                 pass
                 #TODO armar una pantalla para preguntar si desea continuar en ese nivel
