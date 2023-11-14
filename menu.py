@@ -4,6 +4,7 @@ from niveles import Nivel_1
 from sonido import Sonido_y_musica
 from niveles import Nivel_2
 from niveles import Nivel_3
+from pantallas import Pantallas
 
 class Menu_inicio:
     def __init__(self, pantalla):
@@ -11,9 +12,9 @@ class Menu_inicio:
         self.keys = None
         self.eventos = None
         self.tiempo_transcurrido = 0
-        self.nivel_1 = Nivel_1(self.pantalla)
-        self.nivel_2 = Nivel_2(self.pantalla)
-        self.nivel_3 = Nivel_3(self.pantalla)
+        self.nivel_1 = None
+        self.nivel_2 = None
+        self.nivel_3 = None
         self.background_menu = pygame.image.load("DEEP DIVE - SUBMARINE SOS/img/background-lvl-2.jpg").convert()
         self.background_menu = pygame.transform.scale(self.background_menu, (1000, ALTO_VENTANA))
         self.img_opciones = pygame.image.load("DEEP DIVE - SUBMARINE SOS/img/opciones_menu.png").convert()
@@ -30,18 +31,12 @@ class Menu_inicio:
         self.nuevo_nivel = False
         self.timer_reiniciado_1 = False
         self.timer_reiniciado_2 = False
+        self.sacar_pantalla_muerte = False
+        self.bandera_crear_instancia_1 = True
+        self.bandera_crear_instancia_2 = True
+        self.bandera_crear_instancia_3 = True
 
-        """ self.tiempo_restante_2 = 60
-        self.evento_timer_2 = pygame.USEREVENT + 1
-        pygame.time.set_timer(self.evento_timer_2, 1000) """
-        
     def mostrar_menu(self, lista_eventos, tiempo_transcurrido):
-        if self.nivel_1.estado_nivel and self.timer_reiniciado_1 == False:
-            self.tiempo_restante = 60
-            self.timer_reiniciado_1 = True
-        elif self.nivel_2.estado_nivel and self.timer_reiniciado_2 == False:
-            self.tiempo_restante = 60
-            self.timer_reiniciado_2 = True
         self.tiempo_transcurrido = tiempo_transcurrido
         self.eventos = lista_eventos
         self.manejar_eventos()
@@ -70,6 +65,9 @@ class Menu_inicio:
             if evento.type == self.evento_timer:
                 if self.tiempo_restante > 0:
                     self.tiempo_restante -= 1
+            if evento.type == pygame.KEYUP:
+                if evento.key == pygame.K_RETURN:
+                    self.sacar_pantalla_muerte = True
 
         if self.seleccionado is not None:
             self.keys = pygame.key.get_pressed()
@@ -78,17 +76,40 @@ class Menu_inicio:
     def realizar_accion(self):
         if self.opciones[self.seleccionado] == "Nuevo Juego":
             self.blitear_menu = False
-            #TODO en la clase niveles, o en una nueva que se llama jugar, desde ahí llamar a los niveles
+            if self.bandera_crear_instancia_1:
+                self.nivel_1 = Nivel_1(self.pantalla)
+                self.bandera_crear_instancia_1 = False
+                if self.nivel_1.estado_nivel and self.timer_reiniciado_1 == False:
+                    self.tiempo_restante = 60
+                    self.timer_reiniciado_1 = True
             self.nivel_1.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
-            if self.nivel_1.estado_nivel:
+            if self.sacar_pantalla_muerte:
+                self.nivel_1.blitear_pantalla_muerte = False
+                self.blitear_menu = True
+                self.seleccionado = None
+            if self.nivel_1 and self.nivel_1.estado_nivel:
+                self.blitear_menu = False
+                if self.bandera_crear_instancia_2:
+                    self.nivel_2 = Nivel_2(self.pantalla)
+                    self.bandera_crear_instancia_2 = False
+                    if self.nivel_2.estado_nivel and self.timer_reiniciado_2 == False:
+                        self.tiempo_restante = 60
+                        self.timer_reiniciado_2 = True
                 self.nivel_2.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
-            if self.nivel_2.estado_nivel:
+            if self.nivel_2 and self.nivel_2.estado_nivel:
+                self.blitear_menu = False
+                if self.bandera_crear_instancia_3:
+                    self.nivel_3 = Nivel_3(self.pantalla)
+                    self.bandera_crear_instancia_3 = False
                 self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
             else:
                 pass
                 #TODO armar una pantalla para preguntar si desea continuar en ese nivel
         elif self.opciones[self.seleccionado] == "Continuar":
             self.blitear_menu = False
+            if self.bandera_crear_instancia_3:
+                self.nivel_3 = Nivel_3(self.pantalla)
+                self.bandera_crear_instancia_3 = False
             self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
         elif self.opciones[self.seleccionado] == "Opciones":
             print("Ir a opciones")

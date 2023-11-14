@@ -25,6 +25,32 @@ class Nivel_1:
         self.hud = HUD(pantalla, self.buzo)# Crear una instancia de HUD
         self.pantalla = pantalla
         self.estado_nivel = False
+        self.blitear_pantalla_muerte = True
+        self.animar_enemigos = True
+    
+    def activar_animacion_enemigos(self):
+        if self.animar_enemigos:
+            Auxiliar.animar_enemigos(self.lista_tiburones)
+            self.animar_enemigos = False
+    
+    def reset(self):
+        self.lvl_pos_x = 0
+        self.buzo = Buzo(50, LIMITE_AGUA+100, 5)
+        self.tiburon1 = Tiburon()
+        self.tiburon2 = Tiburon()
+        self.tiburon3 = Tiburon()
+        self.pez_espada1 = Pez_espada()
+        self.pez_espada2 = Pez_espada()
+        self.pez_espada3 = Pez_espada()
+        self.lista_tiburones = [self.tiburon1, self.tiburon2, self.tiburon3, self.pez_espada1, self.pez_espada2, self.pez_espada3]
+        self.botin1 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+50)
+        self.botin2 = Botin(self.background.background_pos_x-5000, LIMITE_AGUA+200)
+        self.botin3 = Botin(self.background.background_pos_x-7000, LIMITE_AGUA+20)
+        self.lista_botines = [self.botin1, self.botin2, self.botin3]
+        self.hud = HUD(self.pantalla, self.buzo)
+        self.estado_nivel = False
+        self.blitear_pantalla_muerte = True
+        self.animar_enemigos = True
 
     def renderizar_nivel(self, keys, tiempo_transcurrido, timer_segundos, sonido):#lógica del bucle
         # Eventos de teclado
@@ -38,7 +64,6 @@ class Nivel_1:
             self.lvl_pos_x = self.background.scroll_background(self.buzo, self.lista_tiburones, self.lvl_pos_x)
             self.background.background_pos_x = x_relativa
 
-        self.pantalla.fill((0, 0, 0))
         self.background.draw(self.pantalla, self.background.background_pos_x)
 
         if self.buzo.objetos == 1:
@@ -56,16 +81,17 @@ class Nivel_1:
                 self.botin3.esparcir_botin(self.pantalla, self.background.background_pos_x-self.botin3.rect.width)
                 self.buzo.update()
                 self.buzo.draw(self.pantalla)
+                self.activar_animacion_enemigos()
                 for tiburon in self.lista_tiburones:
                     tiburon.update(tiempo_transcurrido)
                     tiburon.draw(self.pantalla)
                 self.buzo.manejar_colisiones(self.lista_tiburones, self.lista_botines)
                 self.hud.actualizar_hud(timer_segundos, None, "nivel_1")
-            
             else:
-                Pantallas.pantalla_personaje_muerto(self.pantalla)
                 sonido.musica_fondo_lvl1.stop()
                 sonido.efecto_agua.stop()
+                if self.blitear_pantalla_muerte:
+                    Pantallas.personaje_muerto(self.pantalla)
                 """ sonido.efecto_muerte_buzo.play()
                 sonido.efecto_muerte_buzo.set_volume(0.0)
                 sonido.efecto_muerte_buzo.stop() """
@@ -130,6 +156,8 @@ class Nivel_2(Nivel_1):
             else:
                 sonido.musica_fondo_lvl1.stop()
                 sonido.efecto_agua.stop()
+                if self.blitear_pantalla_muerte:
+                    Pantallas.personaje_muerto(self.pantalla)
                 
                 """ sonido.efecto_muerte_buzo.play()
                 sonido.efecto_muerte_buzo.set_volume(0.0)
@@ -156,7 +184,7 @@ class Nivel_3(Nivel_2):
         #TODO lógica para finalizar el nivel
         if self.kraken.vida == 0:
             #TODO pantalla para el fin del juego
-            Pantallas.pantalla_fin_nivel(self.pantalla)
+            Pantallas.fin_nivel(self.pantalla)
             sonido.musica_fondo_lvl1.stop()
             sonido.efecto_agua.stop()
         else:
@@ -174,7 +202,8 @@ class Nivel_3(Nivel_2):
                 self.submarino.manejar_colisiones(self.kraken)
                 self.hud.actualizar_hud(timer_segundos,self.kraken, "nivel_3")
             else:
-                Pantallas.pantalla_personaje_muerto(self.pantalla)
+                if self.blitear_pantalla_muerte:
+                    Pantallas.personaje_muerto(self.pantalla)
                 sonido.musica_fondo_lvl1.stop()
                 sonido.efecto_agua.stop()
                 

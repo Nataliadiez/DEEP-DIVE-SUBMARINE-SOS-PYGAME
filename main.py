@@ -12,12 +12,10 @@ titulo_ventana = pygame.display.set_caption("DEEP DIVE - SUBMARINE SOS")
 CLOCK = pygame.time.Clock()
 
 menu = Menu_inicio(pantalla)
-Auxiliar.dibujar_enemigos(menu)
 
 while menu.correr:
     lista_eventos = pygame.event.get()
-    tiempo_transcurrido = CLOCK.tick(FPS)
-    CLOCK.tick(FPS) # Obtener el tiempo transcurrido
+    tiempo_transcurrido = CLOCK.tick(FPS)# Obtener el tiempo transcurrido
     menu.mostrar_menu(lista_eventos, tiempo_transcurrido)
     pygame.display.flip()
 pygame.quit()
