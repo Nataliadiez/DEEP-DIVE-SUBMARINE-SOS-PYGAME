@@ -78,7 +78,6 @@ class Nivel_1:
                     sonido.musica_fondo_lvl1.stop()
                     sonido.efecto_agua.stop()
 
-
 class Nivel_2(Nivel_1):
     def __init__(self, pantalla) -> None:
         super().__init__(pantalla)
@@ -158,6 +157,8 @@ class Nivel_3(Nivel_1):
         self.kraken = Kraken()
         self.hud = HUD(pantalla, self.submarino)# Crear una instancia de HUD
         self.kraken_muerto = True
+        self.blitear_imagenes = True
+        self.bandera_guardar_score = True
 
     def renderizar_nivel(self, keys, tiempo_transcurrido, timer_segundos, sonido):#lógica del bucle
         # Eventos de teclado
@@ -165,8 +166,9 @@ class Nivel_3(Nivel_1):
         if timer_segundos == 0:
             self.submarino.vivo = False
 
-        self.pantalla.fill((0, 0, 0))
-        self.background.draw(self.pantalla)  # Llama al método draw sin cambiar la posición del fondo
+        if self.blitear_imagenes:
+            self.pantalla.fill((0, 0, 0))
+            self.background.draw(self.pantalla)  # Llama al método draw sin cambiar la posición del fondo
 
         #TODO lógica para finalizar el nivel
         if self.kraken.vida == 0:
@@ -176,7 +178,7 @@ class Nivel_3(Nivel_1):
             if self.kraken_muerto:
                 sonido.muerte_kraken.play()
                 self.kraken_muerto = False
-            self.pantalla_carga.pantalla_fin_juego()
+                self.estado_nivel = True
         else:
             if self.submarino.vivo:
                 self.submarino.hits_kraken = sonido.hits_kraken

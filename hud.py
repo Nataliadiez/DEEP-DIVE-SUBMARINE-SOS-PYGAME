@@ -21,6 +21,11 @@ class HUD:
         self.rect_misil = self.img_misil.get_rect()
         self.rect_misil.x = 710
         self.rect_misil.y = 4
+        self.score_lvl_1 = 0
+        self.score_lvl_2 = 0
+        self.score_lvl_3 = 0
+        self.score_total = 0
+        global score_total
     def actualizar_hud(self,timer_segundos, kraken=None, nivel=None):
         vida = self.personaje.porcentaje_vida
         objetos = self.personaje.objetos
@@ -33,7 +38,6 @@ class HUD:
                 self.pantalla.blit(self.img_barra_vida_kraken, self.rect_vida_kraken)
         self.img_barra_vida = Auxiliar.personalizar_img(f"{PATH_IMAGE}/hud/vida-{vida}.png", True, 180, 50, True, COLOR_ROJO_PAINT)
 
-
         #TODO poner la imagen del item a recoger según cada nivel
         font = pygame.font.Font("DEEP DIVE - SUBMARINE SOS/fonts/ARCADE_N.TTF", 30)
         color_fuente = COLOR_NEGRO
@@ -44,13 +48,22 @@ class HUD:
         text_rect.y = 15  # Posicionar en el eje Y a 50
         if nivel:
             if nivel == "nivel_1":
+                self.score_lvl_1 = self.personaje.porcentaje_vida*10
+                texto_score = f"Score: {self.score_lvl_1}"
                 self.pantalla.blit(self.img_submarino, self.rect_submarino)
                 self.pantalla.blit(text, text_rect)
+                self.personaje.score = self.personaje.porcentaje_vida*10
             elif nivel == "nivel_2":
+                self.score_lvl_2 = self.personaje.porcentaje_vida*10
+                texto_score = f"Score: {self.score_lvl_2}"
                 self.pantalla.blit(self.img_misil, self.rect_misil)
                 self.pantalla.blit(text, text_rect)
+                self.personaje.score = self.personaje.porcentaje_vida*10
             elif nivel == "nivel_3":
+                self.score_lvl_3 = self.personaje.porcentaje_vida*10
+                texto_score = f"Score: {self.score_lvl_3}"
                 color_fuente = COLOR_BLANCO
+                self.personaje.score = self.personaje.porcentaje_vida*10
 
         #texto temporizador oxigeno
         temporizador = f"={timer_segundos}"
@@ -63,3 +76,12 @@ class HUD:
         # Bliteo barra de vida e imagen oxígeno
         self.pantalla.blit(self.img_barra_vida, self.rect_barra_vida)
         self.pantalla.blit(self.img_oxigeno, self.rect_oxigeno)
+
+        
+        txt_score = font.render(texto_score, True, color_fuente)
+        text_rect = txt_score.get_rect()
+        text_rect.x = ANCHO_VENTANA/2 - 150  # Centrar en el eje X
+        text_rect.y = 15  # Posicionar en el eje Y a 50
+        self.pantalla.blit(txt_score, text_rect)
+
+            

@@ -1,5 +1,6 @@
 import pygame
 from constantes import *
+import json
 
 class Auxiliar:
     @staticmethod #se pone metodo estatico para no construir un objeto
@@ -33,7 +34,6 @@ class Auxiliar:
             imagen = pygame.transform.scale(imagen, (ancho, alto))
         if color_key:
             imagen.set_colorkey(color)
-
         return imagen
     
     
@@ -45,29 +45,11 @@ class Auxiliar:
                 tiburon[i].set_animation(f"{PATH_IMAGE}/enemigos/Shark-Sheet.png", 8, 1, 0, ANCHO_TIBURON,ALTO_TIBURON, False, None)
             else:
                 tiburon[i].set_animation(f"{PATH_IMAGE}/enemigos/pez_espada.png", 4, 1, 0, 300, 50, False, None)
+    
+    @staticmethod
+    def ordenar_puntajes(lista_datos, score):
+        return sorted(lista_datos, key=lambda x: x[score], reverse=True)
+
 
     #TODO usar esta lógica para guardar los puntajes en vez de la música
-    """ @staticmethod
-    def crear_json_musica(path_archivo, musica_fondo):
-        # Reemplaza las dobles barras invertidas con una sola
-        musica_fondo = musica_fondo.replace("//", "/")
 
-        with open(path_archivo, "w", encoding="utf-8") as archivo:
-            dict_musica = {"musica_fondo": musica_fondo}
-            json.dump(dict_musica, archivo, indent=4)
-        #print(f"Música de fondo: {dict_musica}.")
-    @staticmethod
-    def leer_json_musica():
-        try:
-            with open("DEEP DIVE - SUBMARINE SOS/json/musica.json", "r", encoding="utf-8") as archivo:
-                contenido = json.load(archivo)
-                if nombre_lista in contenido:
-                    resultado = contenido[nombre_lista]
-                else:
-                    print(f"No se encontró la lista: {nombre_lista} en el archivo.")
-        except FileNotFoundError:
-            print(f"No existe el arhivo")
-        except Exception as error:
-            print(f"No se pudo leer el archivo\nError: {error}")
-        
-        return contenido """

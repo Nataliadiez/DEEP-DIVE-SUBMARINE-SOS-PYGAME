@@ -14,10 +14,8 @@ class Buzo:
         self.posicion_y = y
         self.velocidad = velocidad
         self.frame = 0
-        self.vidas = 3
         self.porcentaje_vida = 60
         self.objetos = 0
-        self.score = 0
         self.animation = self.nadar_der
         self.image = self.animation[self.frame]
         self.ancho_imagen = self.image.get_width()
@@ -30,6 +28,7 @@ class Buzo:
         #colisiones
         self.num_colisiones = 0
         self.mordida_tiburon = None
+        self.score = 0
 
     def control(self, keys):
         self.posicion_x = 0
@@ -76,7 +75,6 @@ class Buzo:
         if self.limite_y <= y < ALTO_VENTANA - self.alto_imagen:
             self.rect.y = y
 
-
     def draw(self, screen):
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect.topleft)
@@ -106,6 +104,7 @@ class Submarino(Buzo):
         #colisiones
         self.num_colisiones = 0
         self.mordida_leviatan = None
+        self.score = 0
         
 
     def control(self, keys):
@@ -185,6 +184,7 @@ class Submarino_armas(Submarino):
         self.disparo_del_enemigo = False
         self.hits_kraken = None
         self.misil = None
+        self.score = 0
     
     def control(self, keys):
         self.posicion_x = 0

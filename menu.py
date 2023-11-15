@@ -40,7 +40,14 @@ class Menu_inicio:
         self.blitear_pantalla_nuevo_nivel_3 = True
         self.blitear_pantalla_inicio = True
         self.bandera_comienzo_nivel_1 = False
-
+        self.cargar_puntaje = True
+        self.mostrar_pantalla_fin_de_juego = True
+        self.bandera_fin_del_nivel_3 = False
+        self.score_lvl_1 = 0
+        self.score_lvl_2 = 0
+        self.score_lvl_3 = 0
+        self.score_total = 0
+        
 
     def reinicio_de_etiquetas(self):
         self.keys = None
@@ -49,9 +56,9 @@ class Menu_inicio:
         self.nivel_1 = None
         self.nivel_2 = None
         self.nivel_3 = None
-        self.background_menu = pygame.image.load("DEEP DIVE - SUBMARINE SOS/img/background-lvl-2.jpg").convert()
+        self.background_menu = Auxiliar.personalizar_img("DEEP DIVE - SUBMARINE SOS/img/menu/background-lvl-2.jpg", True, 1000, ALTO_VENTANA)
+        self.img_opciones = Auxiliar.personalizar_img("DEEP DIVE - SUBMARINE SOS/img/menu/opciones_menu.png", True, 400, 450)
         self.background_menu = pygame.transform.scale(self.background_menu, (1000, ALTO_VENTANA))
-        self.img_opciones = pygame.image.load("DEEP DIVE - SUBMARINE SOS/img/opciones_menu.png").convert()
         self.img_opciones = pygame.transform.scale(self.img_opciones, (400, 450))
         self.opciones = ["Nuevo Juego", "Opciones", "Score"]
         self.seleccionado = None
@@ -75,8 +82,14 @@ class Menu_inicio:
         self.blitear_pantalla_nuevo_nivel_3 = True
         self.blitear_pantalla_inicio = True
         self.bandera_comienzo_nivel_1 = False
+        self.mostrar_pantalla_fin_de_juego = True
+        self.bandera_fin_del_nivel_3 = True
+        self.blitear_pantalla_inicio = True
+        self.bandera_comienzo_nivel_1 = False
+        self.cargar_puntaje = True
+        self.mostrar_pantalla_fin_de_juego = True
+        self.bandera_fin_del_nivel_3 = False
         #TODO agregar los nuevos atributos que vaya agregando
-
 
     def mostrar_menu(self, lista_eventos, tiempo_transcurrido):
         self.tiempo_transcurrido = tiempo_transcurrido
@@ -105,11 +118,13 @@ class Menu_inicio:
                         self.seleccionado = 0
                     elif (pos_mous[0] >= 375 and pos_mous[0] <= 616) and (pos_mous[1] >= 268 and pos_mous[1] <= 333):
                         self.seleccionado = 1
+                    elif (pos_mous[0] >= 375 and pos_mous[0] <= 616) and (pos_mous[1] >= 366 and pos_mous[1] <= 434):
+                        self.seleccionado = 2
             if evento.type == self.evento_timer:
                 if self.tiempo_restante > 0:
                     self.tiempo_restante -= 1
             if evento.type == pygame.KEYUP:
-                if evento.key == pygame.K_BACKSPACE:
+                if evento.key == pygame.K_LSHIFT:
                     if self.nivel_1:
                         self.nivel_1.blitear_pantalla_muerte = False
                         self.sonido.musica_fondo_lvl1.stop()
@@ -127,11 +142,18 @@ class Menu_inicio:
                         self.blitear_pantalla_inicio = False
                     elif self.bandera_comienzo_nivel_1:
                         self.blitear_pantalla_nuevo_nivel_1 = False
+
                     if self.nivel_1:
                         self.blitear_pantalla_nuevo_nivel_2 = False
                     if self.nivel_2:
                         self.blitear_pantalla_nuevo_nivel_3 = False
+
+                    if self.mostrar_pantalla_fin_de_juego:
+                        self.mostrar_pantalla_fin_de_juego = False
+                    elif self.bandera_fin_del_nivel_3:
+                        self.cargar_puntaje = False
                 #TODO lógica para pasar la pantalla de nuevo nivel y de las historias.
+
 
         if self.seleccionado is not None:
             self.keys = pygame.key.get_pressed()
@@ -154,6 +176,7 @@ class Menu_inicio:
                     self.timer_reiniciado = True
                 self.nivel_1.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
                 if self.nivel_1 and self.nivel_1.estado_nivel:
+                    self.score_lvl_1 = self.nivel_1.buzo.score
                     self.blitear_menu = False
                     if self.blitear_pantalla_nuevo_nivel_2:
                         self.pantalla_carga.nuevo_nivel("2")
@@ -166,6 +189,7 @@ class Menu_inicio:
                                 self.timer_reiniciado_1 = True
                         self.nivel_2.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
                 if self.nivel_2 and self.nivel_2.estado_nivel:
+                    self.score_lvl_2 = self.nivel_2.submarino.score
                     self.blitear_menu = False
                     if self.blitear_pantalla_nuevo_nivel_3:
                         self.pantalla_carga.nuevo_nivel("3")
@@ -173,10 +197,19 @@ class Menu_inicio:
                         if self.bandera_crear_instancia_3:
                             self.nivel_3 = Nivel_3(self.pantalla)
                             self.bandera_crear_instancia_3 = False
-                            if self.nivel_2.estado_nivel and self.timer_reiniciado_2 == False:
+                        if self.nivel_2.estado_nivel and self.timer_reiniciado_2 == False:
                                 self.tiempo_restante = 60
                                 self.timer_reiniciado_2 = True
                         self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
+                        if self.nivel_3.estado_nivel:
+                            self.score_lvl_3 = self.nivel_3.submarino.score
+                            self.nivel_3.blitear_imagenes = False
+                            if self.mostrar_pantalla_fin_de_juego:
+                                self.pantalla_carga.pantalla_fin_juego()
+                                self.bandera_fin_del_nivel_3 = True
+                            elif self.cargar_puntaje:
+                                self.score_total = self.score_lvl_1 + self.score_lvl_2 + self.score_lvl_3
+                                self.pantalla_carga.ingreso_datos(self.eventos, self.score_total)
                     #TODO armar una pantalla para preguntar si desea continuar en ese nivel
         elif self.opciones[self.seleccionado] == "Opciones":
             #TODO silenciar toda la música
@@ -186,5 +219,5 @@ class Menu_inicio:
                 self.bandera_crear_instancia_3 = False
             self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
         elif self.opciones[self.seleccionado] == "Score":
-            print("Ver puntuación")
-            # lógica de puntuación
+            self.blitear_menu = False
+            self.pantalla_carga.pantalla_score()
