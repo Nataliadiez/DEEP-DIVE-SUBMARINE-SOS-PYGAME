@@ -47,7 +47,6 @@ class Menu_inicio:
         self.score_lvl_2 = 0
         self.score_lvl_3 = 0
         self.score_total = 0
-        
 
     def reinicio_de_etiquetas(self):
         self.keys = None
@@ -86,9 +85,14 @@ class Menu_inicio:
         self.bandera_fin_del_nivel_3 = True
         self.blitear_pantalla_inicio = True
         self.bandera_comienzo_nivel_1 = False
+        self.bandera_comienzo_nivel_1 = False
         self.cargar_puntaje = True
         self.mostrar_pantalla_fin_de_juego = True
         self.bandera_fin_del_nivel_3 = False
+        self.score_lvl_1 = 0
+        self.score_lvl_2 = 0
+        self.score_lvl_3 = 0
+        self.score_total = 0
         #TODO agregar los nuevos atributos que vaya agregando
 
     def mostrar_menu(self, lista_eventos, tiempo_transcurrido):
@@ -152,7 +156,6 @@ class Menu_inicio:
                         self.mostrar_pantalla_fin_de_juego = False
                     elif self.bandera_fin_del_nivel_3:
                         self.cargar_puntaje = False
-                #TODO lógica para pasar la pantalla de nuevo nivel y de las historias.
 
 
         if self.seleccionado is not None:
@@ -198,8 +201,8 @@ class Menu_inicio:
                             self.nivel_3 = Nivel_3(self.pantalla)
                             self.bandera_crear_instancia_3 = False
                         if self.nivel_2.estado_nivel and self.timer_reiniciado_2 == False:
-                                self.tiempo_restante = 60
-                                self.timer_reiniciado_2 = True
+                            self.tiempo_restante = 60
+                            self.timer_reiniciado_2 = True
                         self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
                         if self.nivel_3.estado_nivel:
                             self.score_lvl_3 = self.nivel_3.submarino.score
@@ -210,14 +213,9 @@ class Menu_inicio:
                             elif self.cargar_puntaje:
                                 self.score_total = self.score_lvl_1 + self.score_lvl_2 + self.score_lvl_3
                                 self.pantalla_carga.ingreso_datos(self.eventos, self.score_total)
-                    #TODO armar una pantalla para preguntar si desea continuar en ese nivel
         elif self.opciones[self.seleccionado] == "Opciones":
             #TODO silenciar toda la música
             self.blitear_menu = False
-            if self.bandera_crear_instancia_3:
-                self.nivel_3 = Nivel_3(self.pantalla)
-                self.bandera_crear_instancia_3 = False
-            self.nivel_3.renderizar_nivel(self.keys, self.tiempo_transcurrido, self.tiempo_restante, self.sonido)
         elif self.opciones[self.seleccionado] == "Score":
             self.blitear_menu = False
             self.pantalla_carga.pantalla_score()

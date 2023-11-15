@@ -135,7 +135,7 @@ class Kraken():
         self.cuerpo_jefe_rect.y = 200
         self.rect_colision = self.cuerpo_jefe_rect
         self.tiempo_transcurrido = 0
-        self.vida = 10
+        self.vida = 100
         self.colision_con_bala = True
         self.colision_fuego = True
         self.lista_rects = []

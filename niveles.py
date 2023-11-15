@@ -48,7 +48,7 @@ class Nivel_1:
 
         self.background.draw(self.pantalla, self.background.background_pos_x)
 
-        if self.buzo.objetos == 1:
+        if self.buzo.objetos == 3:
             sonido.musica_fondo_lvl1.stop()
             sonido.efecto_agua.stop()
             self.estado_nivel = True
@@ -113,7 +113,7 @@ class Nivel_2(Nivel_1):
         self.pantalla.fill((0, 0, 0))
         self.background.draw(self.pantalla, self.background.background_pos_x)
 
-        if self.submarino.objetos == 1:
+        if self.submarino.objetos == 3:
             sonido.musica_fondo_lvl2.stop()
             sonido.efecto_agua.stop()
             self.estado_nivel = True
