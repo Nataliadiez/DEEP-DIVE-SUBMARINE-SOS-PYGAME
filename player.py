@@ -183,6 +183,8 @@ class Submarino_armas(Submarino):
         self.bala = None
         self.balazos_atinados = 0
         self.disparo_del_enemigo = False
+        self.hits_kraken = None
+        self.misil = None
     
     def control(self, keys):
         self.posicion_x = 0
@@ -233,6 +235,7 @@ class Submarino_armas(Submarino):
                 kraken.colision_con_bala = False
                 self.bala.colision_bala = True
                 print(f"balazos atinados: {self.balazos_atinados}")
+                self.hits_kraken.play()
                 kraken.vida -= 10
             if kraken.vida == 0:
                 print("Kraken muerto")
@@ -271,6 +274,7 @@ class Submarino_armas(Submarino):
         # Si no hay una bala en vuelo, crea una nueva bala y agrégala al grupo
         if not self.bala:
             self.bala = Bala(self.rect.right, self.rect.centery)
+            self.misil.play()
 
 class Bala(pygame.sprite.Sprite):
     def __init__(self, x, y):

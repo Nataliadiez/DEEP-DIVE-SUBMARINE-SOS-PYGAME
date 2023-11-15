@@ -18,8 +18,8 @@ class Nivel_1:
         self.pez_espada2 = Pez_espada()
         self.pez_espada3 = Pez_espada()
         self.lista_tiburones = [self.tiburon1, self.tiburon2, self.tiburon3, self.pez_espada1, self.pez_espada2, self.pez_espada3]
-        self.botin1 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+50)
-        self.botin2 = Botin(self.background.background_pos_x-5000, LIMITE_AGUA+200)
+        self.botin1 = Botin(self.background.background_pos_x-5000, LIMITE_AGUA+50)
+        self.botin2 = Botin(self.background.background_pos_x-6000, LIMITE_AGUA+200)
         self.botin3 = Botin(self.background.background_pos_x-7000, LIMITE_AGUA+20)#TODO volverlo a 6000
         self.lista_botines = [self.botin1, self.botin2, self.botin3]
         self.hud = HUD(pantalla, self.buzo)# Crear una instancia de HUD
@@ -27,30 +27,12 @@ class Nivel_1:
         self.estado_nivel = False
         self.blitear_pantalla_muerte = True
         self.animar_enemigos = True
+        self.pantalla_carga = Pantallas(self.pantalla)
     
     def activar_animacion_enemigos(self):
         if self.animar_enemigos:
             Auxiliar.animar_enemigos(self.lista_tiburones)
             self.animar_enemigos = False
-    
-    def reset(self):
-        self.lvl_pos_x = 0
-        self.buzo = Buzo(50, LIMITE_AGUA+100, 5)
-        self.tiburon1 = Tiburon()
-        self.tiburon2 = Tiburon()
-        self.tiburon3 = Tiburon()
-        self.pez_espada1 = Pez_espada()
-        self.pez_espada2 = Pez_espada()
-        self.pez_espada3 = Pez_espada()
-        self.lista_tiburones = [self.tiburon1, self.tiburon2, self.tiburon3, self.pez_espada1, self.pez_espada2, self.pez_espada3]
-        self.botin1 = Botin(self.background.background_pos_x-4000, LIMITE_AGUA+50)
-        self.botin2 = Botin(self.background.background_pos_x-5000, LIMITE_AGUA+200)
-        self.botin3 = Botin(self.background.background_pos_x-7000, LIMITE_AGUA+20)
-        self.lista_botines = [self.botin1, self.botin2, self.botin3]
-        self.hud = HUD(self.pantalla, self.buzo)
-        self.estado_nivel = False
-        self.blitear_pantalla_muerte = True
-        self.animar_enemigos = True
 
     def renderizar_nivel(self, keys, tiempo_transcurrido, timer_segundos, sonido):#lógica del bucle
         # Eventos de teclado
@@ -88,13 +70,13 @@ class Nivel_1:
                 self.buzo.manejar_colisiones(self.lista_tiburones, self.lista_botines)
                 self.hud.actualizar_hud(timer_segundos, None, "nivel_1")
             else:
-                sonido.musica_fondo_lvl1.stop()
-                sonido.efecto_agua.stop()
                 if self.blitear_pantalla_muerte:
-                    Pantallas.personaje_muerto(self.pantalla)
-                """ sonido.efecto_muerte_buzo.play()
-                sonido.efecto_muerte_buzo.set_volume(0.0)
-                sonido.efecto_muerte_buzo.stop() """
+                    self.pantalla_carga.personaje_muerto()
+                    sonido.musica_fondo_lvl1.stop()
+                    sonido.efecto_agua.stop()
+                else:
+                    sonido.musica_fondo_lvl1.stop()
+                    sonido.efecto_agua.stop()
 
 
 class Nivel_2(Nivel_1):
@@ -133,13 +115,13 @@ class Nivel_2(Nivel_1):
         self.background.draw(self.pantalla, self.background.background_pos_x)
 
         if self.submarino.objetos == 1:
-            sonido.musica_fondo_lvl1.stop()
+            sonido.musica_fondo_lvl2.stop()
             sonido.efecto_agua.stop()
             self.estado_nivel = True
         else:
             if self.submarino.vivo:
-                sonido.volumen_lvl1 = 0.0
-                sonido.musica_fondo_lvl1.set_volume(sonido.volumen_lvl1)
+                sonido.volumen_lvl2 = 0.1
+                sonido.musica_fondo_lvl2.set_volume(sonido.volumen_lvl2)
                 sonido.volumen_efecto_agua = 0.1
                 sonido.efecto_agua.set_volume(sonido.volumen_efecto_agua)
                 self.arma1.esparcir_botin(self.pantalla, self.background.background_pos_x-self.arma1.rect.width)
@@ -154,16 +136,20 @@ class Nivel_2(Nivel_1):
                 self.hud.actualizar_hud(timer_segundos, None, "nivel_2")
             
             else:
-                sonido.musica_fondo_lvl1.stop()
-                sonido.efecto_agua.stop()
                 if self.blitear_pantalla_muerte:
-                    Pantallas.personaje_muerto(self.pantalla)
-                
-                """ sonido.efecto_muerte_buzo.play()
-                sonido.efecto_muerte_buzo.set_volume(0.0)
-                sonido.efecto_muerte_buzo.stop() """
+                    self.pantalla_carga.personaje_muerto()
+                    sonido.volumen_lvl2 = 0.0
+                    sonido.musica_fondo_lvl2.set_volume(sonido.volumen_lvl2)
+                    sonido.musica_fondo_lvl2.stop()
+                    sonido.efecto_agua.stop()
+                else:
+                    sonido.volumen_lvl2 = 0.0
+                    sonido.musica_fondo_lvl2.set_volume(sonido.volumen_lvl2)
+                    sonido.musica_fondo_lvl2.stop()
+                    sonido.efecto_agua.stop()
 
-class Nivel_3(Nivel_2):
+
+class Nivel_3(Nivel_1):
     def __init__(self, pantalla) -> None:
         super().__init__(pantalla)
         self.background = StaticBackground("DEEP DIVE - SUBMARINE SOS/img/background/Underwater_Night_9.jpg", ANCHO_VENTANA, ALTO_VENTANA, True)#background
@@ -171,6 +157,7 @@ class Nivel_3(Nivel_2):
         self.submarino.limite_y = 100
         self.kraken = Kraken()
         self.hud = HUD(pantalla, self.submarino)# Crear una instancia de HUD
+        self.kraken_muerto = True
 
     def renderizar_nivel(self, keys, tiempo_transcurrido, timer_segundos, sonido):#lógica del bucle
         # Eventos de teclado
@@ -184,15 +171,21 @@ class Nivel_3(Nivel_2):
         #TODO lógica para finalizar el nivel
         if self.kraken.vida == 0:
             #TODO pantalla para el fin del juego
-            Pantallas.fin_nivel(self.pantalla)
-            sonido.musica_fondo_lvl1.stop()
+            sonido.musica_fondo_lvl3.stop()
             sonido.efecto_agua.stop()
+            if self.kraken_muerto:
+                sonido.muerte_kraken.play()
+                self.kraken_muerto = False
+            self.pantalla_carga.pantalla_fin_juego()
         else:
             if self.submarino.vivo:
+                self.submarino.hits_kraken = sonido.hits_kraken
+                self.submarino.misil = sonido.misil
+                self.kraken.disparo_fuego = sonido.fuego
                 #TODO poner acá el sonido del jefe
                 #self.submarino.golpe_jefe = sonido.golpe_jefe
-                sonido.volumen_lvl1 = 0.0
-                sonido.musica_fondo_lvl1.set_volume(sonido.volumen_lvl1)
+                sonido.volumen_lvl3 = 0.2
+                sonido.musica_fondo_lvl3.set_volume(sonido.volumen_lvl3)
                 sonido.volumen_efecto_agua = 0.1
                 sonido.efecto_agua.set_volume(sonido.volumen_efecto_agua)
                 self.kraken.update(tiempo_transcurrido)
@@ -203,7 +196,10 @@ class Nivel_3(Nivel_2):
                 self.hud.actualizar_hud(timer_segundos,self.kraken, "nivel_3")
             else:
                 if self.blitear_pantalla_muerte:
-                    Pantallas.personaje_muerto(self.pantalla)
-                sonido.musica_fondo_lvl1.stop()
-                sonido.efecto_agua.stop()
+                    self.pantalla_carga.personaje_muerto()
+                else:
+                    sonido.volumen_lvl3 = 0.0
+                    sonido.musica_fondo_lvl3.set_volume(sonido.volumen_lvl3)
+                    sonido.musica_fondo_lvl3.stop()
+                    sonido.efecto_agua.stop()
                 

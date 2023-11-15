@@ -1,8 +1,6 @@
 import pygame
 import sys
-from constantes import *
 from menu import *
-from auxiliar import Auxiliar
 
 pygame.init()
 

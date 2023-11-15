@@ -98,6 +98,8 @@ class Kraken():
         self.proyectil = Auxiliar.personalizar_img("DEEP DIVE - SUBMARINE SOS/img/enemigos/kraken/fueguito.png", True, 50, 30,  True, COLOR_BLANCO)
         self.frame = 0
 
+        self.disparo_fuego = None
+
         self.rect_imagen_proyectil1 = self.proyectil.get_rect()
         self.rect_imagen_proyectil1.x = 380
         self.rect_imagen_proyectil1.y = 282
@@ -133,7 +135,7 @@ class Kraken():
         self.cuerpo_jefe_rect.y = 200
         self.rect_colision = self.cuerpo_jefe_rect
         self.tiempo_transcurrido = 0
-        self.vida = 100
+        self.vida = 10
         self.colision_con_bala = True
         self.colision_fuego = True
         self.lista_rects = []
@@ -148,7 +150,7 @@ class Kraken():
             self.imagen_tentaculo = self.animacion_tentaculos[self.frame]
             self.tiempo_transcurrido = 0  # Reiniciar el contador
         
-        velocidad_proyectil = 400
+        velocidad_proyectil = 200
         tiempo = delta_tiempo / 1000
         proyectil = velocidad_proyectil * tiempo
         self.rect_imagen_proyectil1.x -= proyectil
@@ -163,6 +165,7 @@ class Kraken():
             self.rect_imagen_proyectil3.x = 380
             self.rect_imagen_proyectil4.x = 380
             self.colision_fuego = True
+            self.disparo_fuego.play()
 
     def draw(self, pantalla, delta_tiempo):
         self.colision_con_bala = True
@@ -178,6 +181,7 @@ class Kraken():
         pygame.draw.rect(pantalla, COLOR_ROJO, self.rect_imagen_proyectil2)
         pygame.draw.rect(pantalla, COLOR_ROJO, self.rect_imagen_proyectil3)
         pygame.draw.rect(pantalla, COLOR_ROJO, self.rect_imagen_proyectil4) """
+            
         pantalla.blit(self.proyectil, self.rect_imagen_proyectil1)
         pantalla.blit(self.proyectil, self.rect_imagen_proyectil2)
         pantalla.blit(self.proyectil, self.rect_imagen_proyectil3)
